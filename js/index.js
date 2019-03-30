@@ -17,26 +17,26 @@ var paddleX = (canvas.width - paddleWidth)/ 2 ;
 
 //variables para  detectar cuando se toquen las tecas direccionales izquierda y derecha
 var rightPressed = false;
-var  leftPressed = false;
+var leftPressed = false;
 
 //Agregar eventos de presionado y soltado de teclas
-document.addEventListener("keydown", keydownHandler, false);
-document.addEventListener("keyup", keyupHandler, false);
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 
 //definimos la funcion cuando presiona la tecla
-function keyupHandler(event) {
-if (event.KeyCode == 39) {
-  rightPressed = true;
-}else if (event.KeyCode == 37) {
-  leftPressed = true;
-}
+function keyDownHandler(event) {
+  if (event.keyCode == 39) {
+    rightPressed = true;
+  } else if (event.keyCode == 37) {
+    leftPressed = true;
+  }
 }
 
 //esta funcion es para cuando suelta la tecla
-function keydownHandler (event){
-  if (event.KeyCode == 39) {
+function keyUpHandler (event){
+  if (event.keyCode == 39) {
     rightPressed = false;
-  }else if (event.KeyCode == 37) {
+  } else if (event.keyCode == 37) {
     leftPressed = false;
   }
 }
@@ -50,8 +50,6 @@ function drawPaddle() {
   context.closePath();
 }
 
-
-
 //esta funcion dibuja una bolita en x,y
 function drawBall() {
   context.beginPath();
@@ -63,22 +61,28 @@ function drawBall() {
  //esta funcion es la que me llama todas las funciones entonces aca adentro ponemos todo lo que queremos llamar
 function draw() {
   context.clearRect (0, 0, canvas.width, canvas.height);
-//se llama la funcion de dibujar en circulo
-drawBall();
-//se manda allamar ahora a la funcion rectangulo
-drawPaddle();
 
-//verificar si llego al limites de las y..le preguntamos si esta en el limites//arriba abajo
-if (y + dy < 0 || y + dy > canvas.height) {
-  dy = -dy;//aqui le cambiamos el dy negativo a positivo porque -dy-dy=+
-}
+  //se llama la funcion de dibujar en circulo
+  drawBall();
+  //se manda allamar ahora a la funcion rectangulo
+  drawPaddle();
 
-//verificra si x llego al limite izquierdo//derecho
-if (x + dx < 0 || x + dx > canvas.width) {
-  dx = -dx;
-}
+  //verificar si llego al limites de las y..le preguntamos si esta en el limites//arriba abajo
+  if (y + dy < 0 || y + dy > canvas.height) {
+    dy = -dy;//aqui le cambiamos el dy negativo a positivo porque -dy-dy=+
+  }
 
+  //verificra si x llego al limite izquierdo//derecho
+  if (x + dx < 0 || x + dx > canvas.width) {
+    dx = -dx;
+  }
 
+  //verificar si se toco la tecla direccional derecha
+  if (rightPressed && paddleX < canvas.width - paddleWidth) {
+    paddleX += 7;
+  } else if (leftPressed && paddleX > 0) {
+    paddleX -= 7;
+  }
 
   x += dx;
   y += dy;
